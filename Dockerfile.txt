@@ -1,0 +1,23 @@
+# Using golang base image as per the given requirement
+FROM golang:1.16.0
+
+# Exposing port 8080 as per the given requirement
+EXPOSE 8080
+
+# Running the container as a non-root user
+RUN useradd -u 9999 golanguser
+
+# Go application build directory
+WORKDIR $GOPATH/src/github.com/Fullscript/go-web-server
+
+# Clone git to compile the go app
+RUN git clone https://github.com/Fullscript/go-web-server
+
+# Compile the go app
+RUN go build -o go-web-server ./go-web-server/main.go
+
+# Set a nonroot user to run the container
+USER golanguser
+
+# Execute go application
+CMD ["go-web-server/main"]
